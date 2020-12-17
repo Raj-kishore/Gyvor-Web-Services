@@ -1,0 +1,27 @@
+package com.dynacult.restapi.exception;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.extern.slf4j.Slf4j;
+
+@Data
+@EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
+@Slf4j
+public class ValidationError {
+
+	private String object;
+	private String field;
+	private Object rejectedValue;
+	private String message;
+
+	public ValidationError(String object, String message) {
+		this.object = object;
+		this.message = message;
+	}
+
+//	public void logError() {
+//		log.error(toString());
+//	}
+}
