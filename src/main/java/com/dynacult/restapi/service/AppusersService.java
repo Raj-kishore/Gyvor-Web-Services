@@ -5,8 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-
+import java.util.*; 
 import com.dynacult.restapi.entity.Appuser;
 import com.dynacult.restapi.exception.BadResourceException;
 import com.dynacult.restapi.exception.ResourceAlreadyExistsException;
@@ -14,9 +15,15 @@ import com.dynacult.restapi.repository.AppusersDAO;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
 import java.util.Collections;
 @Service
-public class AppusersService {
+public class AppusersService  implements UserDetailsService {
 
 	@Autowired
 	private AppusersDAO appusersDAO;
@@ -44,6 +51,30 @@ public class AppusersService {
 			exc.addErrorMessage("Appuser is null or empty");
 			throw exc;
 		}
+	}
+	
+	@Override
+	public UserDetails loadUserByUsername(String phoneNo) throws UsernameNotFoundException {
+		List<Appuser> usersArray = this.findAll();
+
+        Boolean isExist = checkUserIfExist(usersArray, phoneNo);
+		
+		if (isExist) {
+			return new User(phoneNo, "$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6",
+					new ArrayList<>());
+		} else {
+			throw new UsernameNotFoundException("User not found with phone number: " + phoneNo);
+		}
+	}
+	public Boolean checkUserIfExist(List<Appuser> usersArray, String wantedPhoneNo) {
+		Boolean isUserExist = false; 
+		for ( Appuser user : usersArray){
+		    if (wantedPhoneNo.equals(user.getUserMobileNo())){
+		        isUserExist = true; 
+		        break;
+		    }
+		}
+		return isUserExist;
 	}
 
 }

@@ -19,7 +19,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 
 public class Appuser implements Serializable {
-    private static final long serialVersionUID = 4048798961366546485L;
+//    private static final long serialVersionUID = 4048798961366546485L;
+	private static final long serialVersionUID = 5926468583005150707L;
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -31,6 +32,12 @@ public class Appuser implements Serializable {
     
     @Column(name = "useremail")
 	private String userEmail;
+    
+    @Column(name = "dealername")
+	private String dealerName;
+    
+    @Column(name = "password")
+	private String password;
     
 	public Long getUserId() {
 		return userId;
@@ -55,6 +62,34 @@ public class Appuser implements Serializable {
 	public void setUserEmail(String userEmail) {
 		this.userEmail = userEmail;
 	}
+	
+	
+	public String getDealerName() {
+		return dealerName;
+	}
+
+	public void setDealerName(String dealerName) {
+		this.dealerName = dealerName;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+		//need default constructor for JSON Parsing
+		public Appuser()
+		{
+			
+		}
+
+		public Appuser(String phoneNo, String password) {
+			this.setUserMobileNo(phoneNo);
+			this.setPassword(password);
+		}
 	
 	
 	
